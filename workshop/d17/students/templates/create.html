@@ -7,12 +7,7 @@
     <title>Document</title>
 </head>
 <body>
-    <!--method : get, post-->
-    <form action="/posts/create/" method="post">
-        {% csrf_token %}
-        <input type="text" name="title"/>
-        <input type="text" name="content"/>
-        <input type="submit" value="Submit"/>
-    </form>
+    <h1>입학 성공 :)</h1>
+    <a href="/students/{student.pk}/">상세 정보 확인</a>
 </body>
 </html>

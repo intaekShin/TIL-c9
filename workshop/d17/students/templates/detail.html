@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h1>학생 신상정보</h1>
+    <h2> 이름 : {{ student.name }}</h2>
+    <p> 이메일 : {{ student.email }}<br>
+        생일 : {{ student.birthday }}<br>
+        나이 : {{ student.age }}세<br>
+    </p>
+    <a href="/students/">학생부</a>
+    <a href="/students/{{ student.pk }}/delete/">졸업</a>    
+    <a href="/students/{{ student.pk }}/edit/">변경</a>
+</body>
+</html>

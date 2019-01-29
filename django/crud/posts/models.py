@@ -19,13 +19,13 @@ class Post(models.Model):
 # post = Post.objects.get(pk=1)
 # 2.3. filter (WHERE)
 # posts = Post.objects.filter(title='Hello').all()
-# post = Post.objects.filter(tile='Hello').first()
+# post = Post.objects.filter(title='Hello').first()
 # 2. 4. LIKE
 
 # 2. 5. order
 # posts = Post.objects.filter(title__contains='He').all() 
-# posts = Post.objects.oreder_by('title'). all() #오름차순 
-# posts = Post.objects.oreder_by('-title'). all() #내림차순 
+# posts = Post.objects.order_by('title'). all() #오름차순 
+# posts = Post.objects.order_by('-title'). all() #내림차순 
 
 # 2.6 limit & offset
 # [offset: offset+limit]
@@ -36,7 +36,7 @@ class Post(models.Model):
 # post.delete()
 
 # 4. Update
-# post = Post.object.get(pk=1)
+# post = Post.objects.get(pk=1)
 # post.title = 'hi'
 # post.save()
 

@@ -7,12 +7,11 @@
     <title>Document</title>
 </head>
 <body>
-    <!--method : get, post-->
-    <form action="/posts/create/" method="post">
-        {% csrf_token %}
-        <input type="text" name="title"/>
-        <input type="text" name="content"/>
-        <input type="submit" value="Submit"/>
-    </form>
+    <h1>Post Detail</h1>
+    <h2>Title : {{ post.title }}</h2>
+    <p>Content : {{ post.content }}</p>
+    <a href="/posts/">List</a>
+    <a href="/posts/{{ post.pk }}/delete/">Delete</a>    
+    <a href="/posts/{{ post.pk }}/edit/">Edit</a>
 </body>
 </html>

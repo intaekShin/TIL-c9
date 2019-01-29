@@ -7,11 +7,12 @@
     <title>Document</title>
 </head>
 <body>
-    <!--method : get, post-->
-    <form action="/posts/create/" method="post">
+    <form action="/students/create/" method="post">
         {% csrf_token %}
-        <input type="text" name="title"/>
-        <input type="text" name="content"/>
+        <input type="text" name="name"/>
+        <input type="text" name="email"/>
+        <input type="date" name="birthday"/>
+        <input type="number" name="age"/>
         <input type="submit" value="Submit"/>
     </form>
 </body>
