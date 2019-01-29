@@ -18,7 +18,7 @@ def create(request):
     age = request.POST.get('age')
     student = Student(name=name, email=email, birthday=birthday, age=age)
     student.save()
-    return render(request, 'create.html')
+    return render(request, 'create.html', {'pk':student.pk})
     
 def detail(request, student_id):
     student = Student.objects.get(pk=student_id)
