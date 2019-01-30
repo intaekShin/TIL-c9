@@ -7,12 +7,11 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="/students/create/" method="post">
+    <h1>Post Edit</h1>
+    <form action = "{% url 'posts:update' post.pk %}" method="post">
         {% csrf_token %}
-        <input type="text" name="name"/>
-        <input type="email" name="email"/>
-        <input type="date" name="birthday"/>
-        <input type="number" name="age"/>
+        <input type="text" name="title" value="{{ post.title }}"/>
+        <input type="text" name="content" value="{{ post.content}}"/>
         <input type="submit" value="Submit"/>
     </form>
 </body>

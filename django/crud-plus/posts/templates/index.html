@@ -7,7 +7,12 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>입학 완료 :)</h1>
-    <a href="/students/{{ pk }}/">상세 정보 확인</a>
+    <h1>Post Index</h1>
+    <a href="{% url 'posts:new' %}">New</a>
+    <ul>
+    {% for post in posts %}
+        <li><a href="{% url 'posts:detail' post.pk %}">{{ post.title }}</a></li>
+    {% endfor %}
+    </ul>
 </body>
 </html>

@@ -8,13 +8,15 @@
 </head>
 <body>
     <h1>학생 신상정보</h1>
-    <h2> 이름 : {{ student.name }}</h2>
-    <p> 이메일 : {{ student.email }}<br>
-        생일 : {{ student.birthday }}<br>
-        나이 : {{ student.age }}세<br>
-    </p>
+    <ul>
+        <li>이름 : {{ student.name }}</li>
+        <li>이메일 : {{ student.email }}</li>
+        <li>생일 : {{ student.birthday }}</li>
+        <li>나이 : {{ student.age }}세</li>
+   </ul> 
     <a href="/students/">학생부</a>
-    <a href="/students/{{ student.pk }}/delete/">졸업</a>    
+    <a href="/students/new/">신입생</a><br>
     <a href="/students/{{ student.pk }}/edit/">변경</a>
+    <a href="/students/{{ student.pk }}/delete/">졸업</a>    
 </body>
 </html>

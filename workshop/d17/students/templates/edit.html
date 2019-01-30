@@ -10,8 +10,8 @@
     <h1>신상 갱신</h1>
     <form action="/students/{{ student.pk }}/update/" method="post">
         {% csrf_token %}
-        <input type="text" name="title" value="{{ student.name }}"/>
-        <input type="text" name="content" value="{{ student.email }}"/>
+        <input type="text" name="name" value="{{ student.name }}"/>
+        <input type="email" name="email" value="{{ student.email }}"/>
         <input type="date" name="birthday" value="{{ student.birthday|date:'Y-m-d'}}">
         <input type="number" name="age" value="{{ student.age }}"/>
         <input type="submit" value="Submit"/>
