@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h1>여기는 New Article :)</h1>
+    
+    {{ form.non_filed_errors }}
+    <form method="post"> 
+    <!--submit을 눌렀을 때 action 주소값이 없으면 페이지 주소 그대로 간다.(path'new/')
+    이 때, method=post 방식으로 보내면서(기본값은get) create함수 조건을 한 번 거치게 된다.
+    현 코드상 조건에 부합 되므로 if참값에 따른 코드를 실행한다.-->
+        {% csrf_token %}
+        <!--제목: <input type="text" name="title" required/><br>-->
+        <!--내용: <input type="text" name="content" required/><br>-->
+        <!-- 1.title-->
+        <div>
+            {{ form.title.errors }} <!-- error messages (ul, li tag) -->
+            {{ form.title.label_tag }} <!-- label tag -->
+            {{ form.title }} <!-- input tag -->
+        </div>
+        <!-- 2.content -->
+        <div>
+            {{ form.content.errors }}
+            {{ form.content.label_tag }}
+            {{ form.content }}
+        </div>
+        <!--{ form }-->
+        저장: <input type="submit" value="Submit"/>
+    </form>
+</body>
+</html>
