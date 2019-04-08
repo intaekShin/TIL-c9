@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block container %}
+    <img src="{{ post.image.url }}"></img>
+    
+    <li>{{post.title}}</li>
+    <li>{{post.content}}</li>
+    <a href="{% url 'posts:list' %}">List</a>
+    <a href="{% url 'posts:edit' post.pk %}">Edit</a>
+    
+{% endblock %}
