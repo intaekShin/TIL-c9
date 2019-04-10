@@ -20,6 +20,7 @@ from django.conf import settings                # settings.py 의 file을 가져
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('accounts/', include('accounts.urls')),    # 대괄호 안에 내용물 뒤에 ,쉼표를 꼭 붙이는 습관을 들이는 게 좋다.
     path('posts/', include('posts.urls')),
 ] 
 

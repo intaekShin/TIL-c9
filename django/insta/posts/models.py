@@ -1,6 +1,7 @@
 from django.db import models
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
+from django.conf import settings
 
 def post_image_path(instance, filename):
     return f'posts/images/{filename}'  # f 스트링 사용. filename에 확장자가 포함되어 있음.
@@ -10,6 +11,10 @@ def post_image_path(instance, filename):
 
 # Create your models here.
 class Post(models.Model):
+    # 특정한 하나의 유저가 게시할 수 있는 게시글은 여러 개이다. (1:N 관계형성)
+    # 위의 경우 N이 누구의 것인지 표시하는 게 효율적이다.
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # 다 삭제에 노출되는 CASCADE 라는 옵션.
+    # 외래키를 담는다. 다른 모델을 들고와도 반영할 수 있는 장점이 있다.(공식문서 권유기준)
     content = models.TextField()
     # image = models.ImageField(blank=True)   # image라는 이름의 column을 추가!
     # (blank=True) 없으면 이미지가 없을 때 오류가 난다.
