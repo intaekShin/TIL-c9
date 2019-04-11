@@ -17,11 +17,15 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static      # static method 가져오기.
 from django.conf import settings                # settings.py 의 file을 가져오기.
+from accounts import views as accounts_views    # 이름 혼동을 피하기 위해 accounts_views  변수명을 변경.
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),    # 대괄호 안에 내용물 뒤에 ,쉼표를 꼭 붙이는 습관을 들이는 게 좋다.
     path('posts/', include('posts.urls')),
+    path('<str:username>/', accounts_views.people, name = 'people'),
 ] 
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # 주소를 업로드.

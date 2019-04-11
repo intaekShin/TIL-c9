@@ -23,4 +23,15 @@ class Post(models.Model):
                     processors = [ResizeToFill(600,600)],   # 처리할 작업 목록
                     format = 'JPEG',    # 저장 포맷
                     options = {'quality':90},   # 옵션
-        )
+                )
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name = 'like_posts')
+    
+        
+class Comment(models.Model):    # models.Model 을 상속받음.
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) 
+    # foreignKey table에 대한 정보를 변수로 입력. user가 1로 작용. 1:N 관계에서.
+    # on_delete=models.CASCADE 는 특정한 유저가 사라지면 게시글도 사라지도록 하는 코드.
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    # 2중 1:N 관계에 걸린다. user와 N, Post와 N.
+    content = models.TextField()
+    

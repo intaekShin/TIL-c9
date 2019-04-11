@@ -1,7 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
+from django.contrib.auth import get_user_model
+
 
 # Create your views here.
 # 회원가입 기능
@@ -38,3 +40,11 @@ def login(request):
 def logout(request):
     auth_logout(request)
     return redirect('posts:list')
+    
+# from django.shortcuts import get_object_or_404    
+# from django.contrib.auth import get_user_model
+def people(request, username):
+    # get_user_model() #=> User
+    people = get_object_or_404(get_user_model(), username=username) 
+    # 앞username 은 컬럼의 username // 뒤username은 매개변수 username
+    return render(request, 'accounts/people.html', {'people':people})

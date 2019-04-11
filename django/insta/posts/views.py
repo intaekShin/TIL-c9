@@ -1,12 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .forms import PostForm
-from .models import Post
+from django.views.decorators.http import require_POST, require_http_methods
+from .forms import PostForm, CommentForm
+from .models import Post, Comment
 
 
 def list(request):
-    posts = Post.objects.order_by('-id').all()      # 내림차순 정렬을 해서 가져옴.order_by('-id') 
-    return render(request, 'posts/list.html', {'posts': posts})
+    posts = Post.objects.order_by('-id').all()      
+    # 내림차순 정렬을 해서 가져옴.order_by('-id') 
+    comment_form = CommentForm()
+    return render(request, 'posts/list.html', {'posts': posts, 'comment_form': comment_form})
 
 
 # from django.contrib.auth.decorators import login_required     @ : 데코레이터, 파이썬에서 쓰이는 문법, 함수 바로 위쪽에 메소드로써 적용. 아래부분을 데코레이터의 파라미터로 적용.
@@ -25,6 +28,7 @@ def create(request):
     return render(request, 'posts/form.html', {'post_form' : post_form}) # 틀을 잡고 살을 붙여나가는 방식으로 진행할 예정.
 
 
+@login_required
 def update(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     
@@ -40,7 +44,8 @@ def update(request, post_id):
         post_form = PostForm(instance=post)
     return render(request, 'posts/form.html', {'post_form' : post_form})
     
-    
+
+@login_required    
 def delete(request, post_id):
     # post = Post.objects.get(id=post_id)
     post = get_object_or_404(Post, id=post_id)
@@ -54,3 +59,43 @@ def delete(request, post_id):
     #     post.delete()
     
     return redirect('posts:list')
+    
+
+# from django.views.decorators.http import require_POST
+@login_required # 데코레이터도 순서에 영향을 받는다.
+@require_POST   # POST로 오는 요청만 받겠다. 주소를 직접 입력하는 것은 GET요청방식이다.
+def comment_create(request, post_id): 
+    # post_id를 통해 post에 대한 정보를 받아와서 조작한다.
+    comment_form = CommentForm(request.POST)
+    if comment_form.is_valid():
+        comment = comment_form.save(commit=False) # DB에 반영없이 객체만 만든다.
+        comment.user = request.user
+        comment.post_id = post_id
+        comment.save()
+    return redirect('posts:list')
+    
+
+@require_http_methods(['GET', 'POST']) # require_POST,GET 과 같은 기능. 다양한 방식이 허용된다.
+def comment_delete(request, post_id, comment_id):
+    # from .models import Comment
+    comment = get_object_or_404(Comment, id=comment_id)
+    
+    if comment.user != request.user:    # 다른사람이면 지우면 안된다.
+        return redirect('posts:list')
+        
+    comment.delete()
+    return redirect('posts:list')
+    
+
+@login_required
+def like(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    
+    if request.user in post.like_users.all():
+        # 2. 좋아요 취소
+        post.like_users.remove(request.user)
+    else:
+        # 1. 좋아요 !
+        post.like_users.add(request.user) # requst.user 로그인된 유저.
+    return redirect('posts:list')
+    
