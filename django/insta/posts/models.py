@@ -18,13 +18,17 @@ class Post(models.Model):
     content = models.TextField()
     # image = models.ImageField(blank=True)   # image라는 이름의 column을 추가!
     # (blank=True) 없으면 이미지가 없을 때 오류가 난다.
-    image = ProcessedImageField(
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name = 'like_posts')
+    
+
+class Image(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)    # 이게 뭔 의미지??? 19.04.15
+    file = ProcessedImageField(
                     upload_to = post_image_path, # 저장 위치
                     processors = [ResizeToFill(600,600)],   # 처리할 작업 목록
                     format = 'JPEG',    # 저장 포맷
-                    options = {'quality':90},   # 옵션
+                    options = {'quality':90},   # 옵션 퀄리티 90 은 무슨 뜻??
                 )
-    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name = 'like_posts')
     
         
 class Comment(models.Model):    # models.Model 을 상속받음.

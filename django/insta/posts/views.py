@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_http_methods
-from .forms import PostForm, CommentForm
+from .forms import PostForm, CommentForm, ImageFormSet
 from .models import Post, Comment
+from django.db import transaction
 
 
 def list(request):
@@ -17,15 +18,32 @@ def list(request):
 def create(request):
     if request.method == 'POST':
         # request.POST #=> {'content':'asdf', 'user':'1'}
-        post_form = PostForm(request.POST, request.FILES)   # 원래 data=request.POST, files=request.FILES 를 줄인 거임.
-        if post_form.is_valid():        # 데이터베이스에 넣어도 문제 없느냐? 묻는 코드.
+        post_form = PostForm(request.POST)   # 원래 data=request.POST, files=request.FILES 를 줄인 거임.
+        image_formset = ImageFormSet(request.POST, request.FILES)
+        if post_form.is_valid() and image_formset.is_valid():        # 데이터베이스에 넣어도 문제 없느냐? 묻는 코드.
             post= post_form.save(commit=False)
             post.user = request.user
-            post.save()                 # 실제 데이터 베이스에 저장.
+            
+            # from django.db import transaction
+            with transaction.atomic():
+                # 첫번째 포스트가 먼저 생성이 되야하고
+                post.save()          # 실제 데이터 베이스에 저장. 그래야 id값이 나오니깐요.
+                # 두번째 생성된 포스트를 바탕으로
+                image_formset.instance = post   # 난 얘꺼다. 표시하기~~!
+                image_formset.save() # 실제 데이터베이스에 저장
+                # 사고를 방지하는 메소드가 있다. 순서에 관한 사고.
+            
+            
             return redirect('posts:list')
     else:
         post_form = PostForm()
-    return render(request, 'posts/form.html', {'post_form' : post_form}) # 틀을 잡고 살을 붙여나가는 방식으로 진행할 예정.
+        # 이미지 폼셋도 넘겨주자
+        image_formset = ImageFormSet()
+    return render(request, 'posts/form.html', {
+                                            'post_form' : post_form, 
+                                            'image_formset':image_formset,
+        
+    }) # 틀을 잡고 살을 붙여나가는 방식으로 진행할 예정. 딕셔너리는 몇줄로 이루어져도 괜찮음.
 
 
 @login_required
@@ -36,13 +54,16 @@ def update(request, post_id):
         return redirect('posts:list')
         
     if request.method == 'POST':
-        post_form = PostForm(request.POST, request.FILES, instance=post)
-        if post_form.is_valid():
+        post_form = PostForm(request.POST, instance=post)
+        image_formset = ImageFormSet(request.POST, request.FILES, instance=post)
+        if post_form.is_valid() and image_formset.is_valid():
             post_form.save()
+            image_formset.save()
             return redirect('posts:list')
     else:
         post_form = PostForm(instance=post)
-    return render(request, 'posts/form.html', {'post_form' : post_form})
+        image_formset = ImageFormSet(instance=post)
+    return render(request, 'posts/form.html', {'post_form' : post_form, 'image_formset':image_formset,})
     
 
 @login_required    
