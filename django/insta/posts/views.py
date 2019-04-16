@@ -4,10 +4,27 @@ from django.views.decorators.http import require_POST, require_http_methods
 from .forms import PostForm, CommentForm, ImageFormSet
 from .models import Post, Comment
 from django.db import transaction
+from itertools import chain
 
 
+def explore(request):
+    posts = Post.objects.order_by('-id').all()
+    comment_form = CommentForm()
+    return render(request, 'posts/list.html', {
+                                            'posts': posts, 
+                                            'comment_form': comment_form,
+                                        })
+
+
+@login_required
 def list(request):
-    posts = Post.objects.order_by('-id').all()      
+    # posts = Post.objects.order_by('-id').all()
+    # 1. 내가 follow하고 있는 사람들의 리스트
+    followings = request.user.followings.all()
+    # 2. followings 변수와 나를 묶음
+    followings = chain(followings, [request.user])
+    # 3. 이 사람들이 작성한 Post들만 뽑아옴.
+    posts = Post.objects.filter(user__in=followings).order_by('-id')
     # 내림차순 정렬을 해서 가져옴.order_by('-id') 
     comment_form = CommentForm()
     return render(request, 'posts/list.html', {'posts': posts, 'comment_form': comment_form})
@@ -119,4 +136,6 @@ def like(request, post_id):
         # 1. 좋아요 !
         post.like_users.add(request.user) # requst.user 로그인된 유저.
     return redirect('posts:list')
+    
+
     

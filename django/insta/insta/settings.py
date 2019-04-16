@@ -127,3 +127,7 @@ STATIC_URL = '/static/'
 # Media
 MEDIA_URL = '/media/'   # 임의로 작성해도 되는 부분.
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # media 폴더를 만들어서 저장시키게 됨.
+
+
+# Auth User Model
+AUTH_USER_MODEL = 'accounts.User'

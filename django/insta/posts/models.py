@@ -20,7 +20,7 @@ class Post(models.Model):
     # (blank=True) 없으면 이미지가 없을 때 오류가 난다.
     like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name = 'like_posts')
     
-
+# Post:Image = 1:N
 class Image(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)    # 이게 뭔 의미지??? 19.04.15
     file = ProcessedImageField(
