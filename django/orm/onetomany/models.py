@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-class User(models.Model):   # 이름만 User.
+class User(models.Model):   # 진짜 회원을 뜻하는 것은 아님. 이름만 User.
     name = models.TextField()
     
 # User:Post = 1:N
