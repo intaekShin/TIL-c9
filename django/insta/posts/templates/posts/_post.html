@@ -42,7 +42,7 @@
     <a href="{% url 'posts:delete' post.id%}" class="btn btn-danger">Delete</a>
     {% endif %}
   </div>
-  <div class="card-body">
+  <div class="card-body" id="comment-list-{{ post.id }}">
     {% for comment in post.comment_set.all %}
       <div class = "card-text">
         <strong>{{ comment.user.username }} </strong>{{ comment.content }}
@@ -52,11 +52,11 @@
         {% endif %}
       </div>
     {% empty %}
-      <div class = "card=text"> 댓글이없습니다.</div>
+    <!--  <div class = "card=text"> 댓글이없습니다.</div>-->
     {% endfor %}
   </div>
   {% if user.is_authenticated %}
-  <form action="{% url 'posts:comment_create' post.id %}" method = "POST">
+  <form action="{% url 'posts:comment_create' post.id %}" method = "POST" class="comment-form">
     {% csrf_token %}
     <!-- getbootstrap -> button addons -->
     <div class="input-group">

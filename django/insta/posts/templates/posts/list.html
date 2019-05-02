@@ -32,6 +32,32 @@
     });
     
     
+    const commentForms = document.querySelectorAll('.comment-form')
+    commentForms.forEach(function(form){
+        
+        form.addEventListener('submit', function(event){
+            event.preventDefault()  // post요청 자체를 막아버리겠다. 
+            console.log(event)
+            // event.target === form
+            const data = new FormData(event.target)
+            // Inspect FormData
+            // for (const item of data.entries()){
+            //     console.log(item)
+            // }
+            axios.post(event.target.action, data) // form태그가 들고있는 action이란 속성의 값을 가져옴.
+                .then(function(response){
+                    const comment = response.data
+                    const commentList = document.querySelector(`#comment-list-${comment.postId}`) // 동적으로 변하는 값이니까 빽틱`을 쓴다.
+                    const newComment = `<div class = "card-text">
+                        <strong>${comment.username} </strong>${comment.content}
+                        <a href="/posts/${comment.postId}/comments/${comment.id}/delete/">삭제</a>
+                    </div>`
+                    commentList.insertAdjacentHTML('beforeend', newComment)
+                    event.target.reset()    // 댓글작성란 비우기!
+                })
+        })
+    })
+    
 </script>
 
 {% endblock %}

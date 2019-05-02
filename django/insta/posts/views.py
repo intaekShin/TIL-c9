@@ -111,7 +111,14 @@ def comment_create(request, post_id):
         comment.user = request.user
         comment.post_id = post_id
         comment.save()
-    return redirect('posts:list')
+        
+    # return redirect('posts:list')
+    return JsonResponse({
+                            'id': comment.id, 
+                            'postId': post_id, 
+                            'username': comment.user.username,
+                            'content': comment.content,
+                        })
     
 
 @require_http_methods(['GET', 'POST']) # require_POST,GET 과 같은 기능. 다양한 방식이 허용된다.
